@@ -1,0 +1,18 @@
+#@ load("@ytt:data", "data")
+---
+routes:
+  GET /lol:
+    status: 200
+    body:
+      message: "lol nice"
+
+  GET /teapot:
+    status: 418
+    body:
+      message: "I'm a teapot"
+
+  POST /hello:
+    status: 200
+    body:
+      message: "hello!"
+      name: #@ data.values.request.name

@@ -2,13 +2,12 @@ package main
 
 import (
 	"io/ioutil"
-	"log"
 
 	"gopkg.in/yaml.v2"
 )
 
 type appConfig struct {
-	Port   *int
+	Path   string
 	Routes map[string]routeConfig
 }
 
@@ -17,18 +16,20 @@ type routeConfig struct {
 	Body   map[string]interface{}
 }
 
-func loadConfig(path string) appConfig {
+func loadConfig(path string) (*appConfig, error) {
 	yamlConfig, err := ioutil.ReadFile(path)
 	if err != nil {
-		log.Fatal(err)
+		return nil, err
 	}
 
 	parsedConfig := appConfig{}
 
 	err = yaml.Unmarshal(yamlConfig, &parsedConfig)
 	if err != nil {
-		log.Fatalf("error unmarshalling yapp.yml: %v", err)
+		return nil, err
 	}
 
-	return parsedConfig
+	parsedConfig.Path = path
+
+	return &parsedConfig, nil
 }

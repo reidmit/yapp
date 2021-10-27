@@ -3,18 +3,19 @@ package main
 import (
 	"bytes"
 	"fmt"
-	"log"
+	"os"
 	"os/exec"
 	"strings"
 
 	"gopkg.in/yaml.v2"
 )
 
-func runYTT(configPath string, config *appConfig, dataValues map[string]interface{}) {
+func runYTT(yttPath string, config *appConfig, dataValues map[string]interface{}) error {
 	dataValuesBytes, _ := yaml.Marshal(dataValues)
-	dataValuesYAML := fmt.Sprintf("#@data/values\n---\n%s", string(dataValuesBytes))
+	dataValuesYAML := "#@data/values\n---\n" +
+		string(dataValuesBytes)
 
-	cmd := exec.Command(defaultYttPath, "-f", "-", "-f", configPath)
+	cmd := exec.Command(yttPath, "-f", "-", "-f", config.Path)
 
 	var stdoutBuf, stderrBuf bytes.Buffer
 	cmd.Stdin = strings.NewReader(dataValuesYAML)
@@ -24,9 +25,11 @@ func runYTT(configPath string, config *appConfig, dataValues map[string]interfac
 	err := cmd.Run()
 
 	if err != nil {
-		log.Printf("ytt stderr: %v", stderrBuf.String())
-		log.Fatalf("error running ytt: %v", err)
+		fmt.Fprintln(os.Stderr, stderrBuf.String())
+		return err
 	}
 
 	yaml.Unmarshal(stdoutBuf.Bytes(), &config)
+
+	return nil
 }

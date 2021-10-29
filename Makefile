@@ -4,13 +4,13 @@ build:
 		./cmd/yapp
 
 example-hello-world:
-	go run ./cmd/yapp examples/hello-world
+	go run ./cmd/yapp examples/hello-world --debug
 
 example-broken:
-	go run ./cmd/yapp examples/broken
+	go run ./cmd/yapp examples/broken --debug
 
 example-static:
-	go run ./cmd/yapp examples/static
+	go run ./cmd/yapp examples/static --debug
 
 example-echo:
-	go run ./cmd/yapp examples/echo
+	go run ./cmd/yapp examples/echo --debug

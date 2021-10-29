@@ -14,7 +14,11 @@ import (
 const generatedDataValuesFile = "request-data-values.yml"
 const generatedInputFile = "generated-app-config.yml"
 
-func Run(appConfig *config.AppConfig, dataValues map[string]interface{}) error {
+func Run(
+	appConfig *config.AppConfig,
+	route config.HandledRoute,
+	dataValues map[string]interface{},
+) (*config.RouteConfig, error) {
 	yttOptions := yttlib.NewOptions()
 
 	yttOptions.Debug = appConfig.Debug
@@ -30,7 +34,7 @@ func Run(appConfig *config.AppConfig, dataValues map[string]interface{}) error {
 	configFileBytes, _ := yaml.Marshal(appConfig)
 	configFileBytes, err := ioutil.ReadFile(appConfig.Path)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
 	result := yttOptions.RunWithFiles(yttlib.Input{
@@ -40,19 +44,23 @@ func Run(appConfig *config.AppConfig, dataValues map[string]interface{}) error {
 	}, ui.NewTTY(appConfig.Debug))
 
 	if result.Err != nil {
-		return result.Err
+		return nil, result.Err
 	}
 
 	if len(result.Files) == 0 {
-		return fmt.Errorf("expected to return an output file but saw zero files")
+		return nil, fmt.Errorf("expected to return an output file but saw zero files")
 	}
 
 	file := result.Files[0]
 	if file.RelativePath() != generatedInputFile {
-		return fmt.Errorf("unexpected result file: %s", file.RelativePath())
+		return nil, fmt.Errorf("unexpected result file: %s", file.RelativePath())
 	}
 
-	yaml.Unmarshal(file.Bytes(), &appConfig)
+	var newAppConfig config.AppConfig
+	yaml.Unmarshal(file.Bytes(), &newAppConfig)
 
-	return nil
+	routeKey := fmt.Sprintf("%s %s", route.Method, route.Path)
+	renderedRouteConfig := newAppConfig.Routes[routeKey]
+
+	return &renderedRouteConfig, nil
 }

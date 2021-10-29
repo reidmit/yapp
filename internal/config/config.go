@@ -5,6 +5,7 @@ import (
 	"log"
 	"os"
 	"path/filepath"
+	"strings"
 
 	"gopkg.in/yaml.v2"
 )
@@ -18,7 +19,13 @@ type AppConfig struct {
 
 type RouteConfig struct {
 	Status *int
-	Body   map[string]interface{}
+	Body   interface{}
+}
+
+type HandledRoute struct {
+	Method string
+	Path   string
+	Config RouteConfig
 }
 
 func Load(configPath string, expectedFileName string) (*AppConfig, error) {
@@ -48,4 +55,20 @@ func Load(configPath string, expectedFileName string) (*AppConfig, error) {
 	parsedConfig.Path = configPath
 
 	return &parsedConfig, nil
+}
+
+func GetHandledRoutes(routes map[string]RouteConfig) []HandledRoute {
+	var handledRoutes []HandledRoute
+
+	for routeWithMethod, routeConfig := range routes {
+		parts := strings.Split(routeWithMethod, " ")
+
+		handledRoutes = append(handledRoutes, HandledRoute{
+			Method: parts[0],
+			Path:   parts[1],
+			Config: routeConfig,
+		})
+	}
+
+	return handledRoutes
 }

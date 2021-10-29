@@ -1,0 +1,11 @@
+#@ load("@ytt:data", "data")
+
+#@ def do_stuff(req):
+#@   return [1,2,{"key":"value"}, req.body]
+#@ end
+
+---
+routes:
+  GET /fancy:
+    status: 200
+    body: #@ do_stuff(data.values.request)

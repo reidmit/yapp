@@ -14,3 +14,6 @@ example-static:
 
 example-echo:
 	go run ./cmd/yapp examples/echo --debug
+
+example-fancy:
+	go run ./cmd/yapp examples/fancy --debug

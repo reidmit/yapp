@@ -18,12 +18,12 @@ type handledRoute struct {
 	config config.RouteConfig
 }
 
-func Serve(appConfig *config.AppConfig, port int64) {
+func Serve(appConfig *config.AppConfig) {
 	setUpHandlers(appConfig)
 
-	fmt.Printf("Listening on port %v...\n", port)
+	fmt.Printf("Listening on port %v...\n", appConfig.Port)
 
-	http.ListenAndServe(":"+strconv.FormatInt(port, 10), nil)
+	http.ListenAndServe(":"+strconv.FormatInt(appConfig.Port, 10), nil)
 }
 
 func setUpHandlers(appConfig *config.AppConfig) {

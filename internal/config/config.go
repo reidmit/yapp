@@ -10,6 +10,8 @@ import (
 
 type AppConfig struct {
 	Path   string
+	Port   int64
+	Debug  bool
 	Routes map[string]RouteConfig
 }
 

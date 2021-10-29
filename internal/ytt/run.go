@@ -11,14 +11,13 @@ import (
 	"gopkg.in/yaml.v2"
 )
 
-const debug = false
 const generatedDataValuesFile = "request-data-values.yml"
 const generatedInputFile = "yapp.yml"
 
 func Run(appConfig *config.AppConfig, dataValues map[string]interface{}) error {
 	yttOptions := yttlib.NewOptions()
 
-	yttOptions.Debug = debug
+	yttOptions.Debug = appConfig.Debug
 	yttOptions.DataValuesFlags.FromFiles = []string{generatedDataValuesFile}
 	yttOptions.DataValuesFlags.ReadFileFunc = func(path string) ([]byte, error) {
 		if path != generatedDataValuesFile {
@@ -38,7 +37,7 @@ func Run(appConfig *config.AppConfig, dataValues map[string]interface{}) error {
 		Files: []*files.File{
 			files.MustNewFileFromSource(files.NewBytesSource(generatedInputFile, configFileBytes)),
 		},
-	}, ui.NewTTY(debug))
+	}, ui.NewTTY(appConfig.Debug))
 
 	if result.Err != nil {
 		return result.Err

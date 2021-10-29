@@ -28,18 +28,7 @@ func main() {
 			DisableDescriptions: true,
 			DisableNoDescFlag:   true,
 		},
-		Run: func(cmd *cobra.Command, args []string) {
-			configPath := args[0]
-			port, _ := cmd.Flags().GetInt64("port")
-
-			appConfig, err := config.Load(configPath)
-			if err != nil {
-				fmt.Printf("error reading config: %v", err)
-				os.Exit(1)
-			}
-
-			server.Serve(appConfig, port)
-		},
+		Run: run,
 	}
 
 	rootCmd.Flags().Int64(
@@ -48,7 +37,28 @@ func main() {
 		"port to listen on (can also set $PORT env var)",
 	)
 
+	rootCmd.Flags().Bool(
+		"debug",
+		false,
+		"enable debug output",
+	)
+
 	rootCmd.Execute()
+}
+
+func run(cmd *cobra.Command, args []string) {
+	configPath := args[0]
+
+	appConfig, err := config.Load(configPath)
+	if err != nil {
+		fmt.Printf("error reading config: %v", err)
+		os.Exit(1)
+	}
+
+	appConfig.Port, _ = cmd.Flags().GetInt64("port")
+	appConfig.Debug, _ = cmd.Flags().GetBool("debug")
+
+	server.Serve(appConfig)
 }
 
 func getAppVersion() string {

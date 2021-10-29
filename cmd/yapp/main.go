@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"os"
 	"strconv"
@@ -11,6 +12,8 @@ import (
 )
 
 const appName = "yapp"
+const configFileName = "yapp.yml"
+const defaultPort = 7000
 
 // expected to be supplied at build time:
 var appVersion string
@@ -18,10 +21,10 @@ var appCommit string
 
 func main() {
 	rootCmd := &cobra.Command{
-		Use:     appName + " <path/to/yapp.yml>",
+		Use:     fmt.Sprintf("%s <path/to/%s>", appName, configFileName),
 		Version: getAppVersion(),
 		Short:   "Run your app",
-		Long:    "Run your app using the given yapp.yml file",
+		Long:    "Run your app using the given configuration file",
 		Args:    cobra.ExactArgs(1),
 		CompletionOptions: cobra.CompletionOptions{
 			DisableDefaultCmd:   true,
@@ -49,7 +52,7 @@ func main() {
 func run(cmd *cobra.Command, args []string) {
 	configPath := args[0]
 
-	appConfig, err := config.Load(configPath)
+	appConfig, err := config.Load(configPath, configFileName)
 	if err != nil {
 		log.Printf("Error reading config: %v", err)
 		os.Exit(1)
@@ -57,6 +60,10 @@ func run(cmd *cobra.Command, args []string) {
 
 	appConfig.Port, _ = cmd.Flags().GetInt64("port")
 	appConfig.Debug, _ = cmd.Flags().GetBool("debug")
+
+	if appConfig.Debug {
+		log.Printf("Loaded config: %+v", appConfig)
+	}
 
 	server.Serve(appConfig)
 }
@@ -85,5 +92,5 @@ func getDefaultPort() int64 {
 		return port
 	}
 
-	return 7000
+	return defaultPort
 }

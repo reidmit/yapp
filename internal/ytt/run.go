@@ -12,7 +12,7 @@ import (
 )
 
 const generatedDataValuesFile = "request-data-values.yml"
-const generatedInputFile = "yapp.yml"
+const generatedInputFile = "generated-app-config.yml"
 
 func Run(appConfig *config.AppConfig, dataValues map[string]interface{}) error {
 	yttOptions := yttlib.NewOptions()

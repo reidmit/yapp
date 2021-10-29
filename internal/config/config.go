@@ -21,14 +21,14 @@ type RouteConfig struct {
 	Body   map[string]interface{}
 }
 
-func Load(configPath string) (*AppConfig, error) {
+func Load(configPath string, expectedFileName string) (*AppConfig, error) {
 	stats, err := os.Stat(configPath)
 	if err != nil {
 		return nil, err
 	}
 
 	if stats.IsDir() {
-		configPath = filepath.Join(configPath, "yapp.yml")
+		configPath = filepath.Join(configPath, expectedFileName)
 	}
 
 	yamlConfig, err := ioutil.ReadFile(configPath)

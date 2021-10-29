@@ -1,7 +1,7 @@
 package main
 
 import (
-	"fmt"
+	"log"
 	"os"
 	"strconv"
 
@@ -51,7 +51,7 @@ func run(cmd *cobra.Command, args []string) {
 
 	appConfig, err := config.Load(configPath)
 	if err != nil {
-		fmt.Printf("error reading config: %v", err)
+		log.Printf("Error reading config: %v", err)
 		os.Exit(1)
 	}
 

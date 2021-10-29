@@ -3,6 +3,7 @@ package server
 import (
 	"fmt"
 	"io/ioutil"
+	"log"
 	"net/http"
 	"strconv"
 	"strings"
@@ -21,7 +22,7 @@ type handledRoute struct {
 func Serve(appConfig *config.AppConfig) {
 	setUpHandlers(appConfig)
 
-	fmt.Printf("Listening on port %v...\n", appConfig.Port)
+	log.Printf("Listening on port %v\n", appConfig.Port)
 
 	http.ListenAndServe(":"+strconv.FormatInt(appConfig.Port, 10), nil)
 }
@@ -30,24 +31,24 @@ func setUpHandlers(appConfig *config.AppConfig) {
 	for _, route := range getHandledRoutes(appConfig.Routes) {
 		route := route // lol
 
-		fmt.Printf("Setting up route %s %s...\n", route.method, route.path)
+		log.Printf("Setting up route %s %s\n", route.method, route.path)
 
 		http.HandleFunc(route.path, func(res http.ResponseWriter, req *http.Request) {
 			if req.Method == route.method {
 				res.Header().Set("Content-Type", "text/x-yaml")
 
-				fmt.Printf("%s %s\n", req.Method, route.path)
+				log.Printf("%s %s\n", req.Method, route.path)
 
 				dataValues, err := generateDataValuesFromRequest(req)
 				if err != nil {
-					fmt.Printf("error generating data values: %v", err)
+					log.Printf("Error generating data values from request: %v", err)
 					http.Error(res, "uh oh", 500)
 					return
 				}
 
 				err = ytt.Run(appConfig, dataValues)
 				if err != nil {
-					fmt.Printf("error running ytt: %v", err)
+					log.Printf("Error running ytt: %v", err)
 					http.Error(res, "uh oh", 500)
 					return
 				}
@@ -62,7 +63,7 @@ func setUpHandlers(appConfig *config.AppConfig) {
 				if route.config.Body != nil {
 					responseBody, err := yaml.Marshal(route.config.Body)
 					if err != nil {
-						fmt.Printf("error marshalling response body: %v", err)
+						log.Printf("Error marshalling response body: %v", err)
 						http.Error(res, "uh oh", 500)
 						return
 					}

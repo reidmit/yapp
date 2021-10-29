@@ -2,6 +2,7 @@ package config
 
 import (
 	"io/ioutil"
+	"log"
 	"os"
 	"path/filepath"
 
@@ -34,6 +35,8 @@ func Load(configPath string) (*AppConfig, error) {
 	if err != nil {
 		return nil, err
 	}
+
+	log.Printf("Loading config file %s", configPath)
 
 	parsedConfig := AppConfig{}
 

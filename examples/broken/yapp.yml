@@ -1,0 +1,7 @@
+#@ load("@ytt:data", "data")
+---
+routes:
+  POST /broken:
+    status: 200
+    body:
+      message: #@ data.values.never_set_to_anything_so_will_always_fail

@@ -11,13 +11,15 @@ import (
 )
 
 const appName = "yapp"
-const appVersion = "0.0.1"
-const yttPath = "/usr/local/bin/ytt"
+
+// expected to be supplied at build time:
+var appVersion string
+var appCommit string
 
 func main() {
 	rootCmd := &cobra.Command{
 		Use:     appName,
-		Version: appVersion,
+		Version: getAppVersion(),
 		CompletionOptions: cobra.CompletionOptions{
 			DisableDefaultCmd:   true,
 			DisableDescriptions: true,
@@ -27,8 +29,8 @@ func main() {
 
 	runCmd := &cobra.Command{
 		Use:   "run <path/to/yapp.yml>",
-		Short: "run your yapp",
-		Long:  "run your yapp using the given yapp.yml file",
+		Short: "Run your yapp",
+		Long:  "Run your yapp using the given yapp.yml file",
 		Args:  cobra.ExactArgs(1),
 		Run: func(cmd *cobra.Command, args []string) {
 			configPath := args[0]
@@ -40,7 +42,7 @@ func main() {
 				os.Exit(1)
 			}
 
-			server.Serve(appConfig, port, yttPath)
+			server.Serve(appConfig, port)
 		},
 	}
 
@@ -53,6 +55,24 @@ func main() {
 	rootCmd.AddCommand(runCmd)
 
 	rootCmd.Execute()
+}
+
+func getAppVersion() string {
+	var v string
+
+	if appVersion != "" {
+		v = appVersion
+	} else {
+		v = "0.0.0"
+	}
+
+	if appCommit != "" {
+		v += "-" + appCommit
+	} else {
+		v += "-dev"
+	}
+
+	return v
 }
 
 func getDefaultPort() int64 {

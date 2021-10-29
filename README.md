@@ -21,6 +21,7 @@ Details about incoming HTTP requests will be passed to the template as [data val
 These are the values that are currently provided to your template:
 
 - `data.values.request.body`: request body, parsed as YAML
+- `data.values.request.headers`: request headers (`map[string]string[]`)
 
 ## examples
 

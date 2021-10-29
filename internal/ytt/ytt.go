@@ -7,7 +7,7 @@ import (
 	"os/exec"
 	"strings"
 
-	"github.com/reidmit/yapp/config"
+	"github.com/reidmit/yapp/internal/config"
 	"gopkg.in/yaml.v2"
 )
 

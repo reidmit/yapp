@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/reidmit/yapp/config"
-	"github.com/reidmit/yapp/server"
+	"github.com/reidmit/yapp/internal/config"
+	"github.com/reidmit/yapp/internal/server"
 )
 
 const (

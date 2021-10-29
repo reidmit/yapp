@@ -6,8 +6,8 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/reidmit/yapp/config"
-	"github.com/reidmit/yapp/ytt"
+	"github.com/reidmit/yapp/internal/config"
+	"github.com/reidmit/yapp/internal/ytt"
 	"gopkg.in/yaml.v2"
 )
 

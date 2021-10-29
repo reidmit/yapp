@@ -6,3 +6,6 @@ example-hello-world:
 
 example-broken:
 	@ go run ./cmd/yapp run examples/broken/yapp.yml
+
+example-static:
+	@ go run ./cmd/yapp run examples/static/yapp.yml

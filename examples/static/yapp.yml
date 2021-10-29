@@ -1,0 +1,6 @@
+---
+routes:
+  GET /hey:
+    status: 200
+    body:
+      message: "hey"

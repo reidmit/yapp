@@ -16,3 +16,8 @@ routes:
     body:
       message: "hello!"
       name: #@ data.values.request.body.name
+
+  POST /headers:
+    status: 200
+    body:
+      requestHeaders: #@ data.values.request.headers

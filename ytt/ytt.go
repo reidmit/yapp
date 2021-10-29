@@ -1,4 +1,4 @@
-package main
+package ytt
 
 import (
 	"bytes"
@@ -7,15 +7,16 @@ import (
 	"os/exec"
 	"strings"
 
+	"github.com/reidmit/yapp/config"
 	"gopkg.in/yaml.v2"
 )
 
-func runYTT(yttPath string, config *appConfig, dataValues map[string]interface{}) error {
+func Run(yttPath string, appConfig *config.AppConfig, dataValues map[string]interface{}) error {
 	dataValuesBytes, _ := yaml.Marshal(dataValues)
 	dataValuesYAML := "#@data/values\n---\n" +
 		string(dataValuesBytes)
 
-	cmd := exec.Command(yttPath, "-f", "-", "-f", config.Path)
+	cmd := exec.Command(yttPath, "-f", "-", "-f", appConfig.Path)
 
 	var stdoutBuf, stderrBuf bytes.Buffer
 	cmd.Stdin = strings.NewReader(dataValuesYAML)
@@ -29,7 +30,7 @@ func runYTT(yttPath string, config *appConfig, dataValues map[string]interface{}
 		return err
 	}
 
-	yaml.Unmarshal(stdoutBuf.Bytes(), &config)
+	yaml.Unmarshal(stdoutBuf.Bytes(), &appConfig)
 
 	return nil
 }

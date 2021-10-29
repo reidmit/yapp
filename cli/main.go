@@ -3,8 +3,10 @@ package main
 import (
 	"flag"
 	"fmt"
-	"net/http"
 	"os"
+
+	"github.com/reidmit/yapp/config"
+	"github.com/reidmit/yapp/server"
 )
 
 const (
@@ -18,7 +20,7 @@ func main() {
 
 	flag.Parse()
 
-	config, err := loadConfig(*configPath)
+	config, err := config.Load(*configPath)
 	if err != nil {
 		fmt.Printf("error reading config: %v", err)
 		os.Exit(1)
@@ -28,14 +30,10 @@ func main() {
 		*yttPath = defaultYttPath
 	}
 
-	setUpHandlers(*config, *yttPath)
-
 	port := defaultPort
 	if envPort, isSet := os.LookupEnv("PORT"); isSet {
 		port = envPort
 	}
 
-	fmt.Printf("Listening on port %v...\n", port)
-
-	http.ListenAndServe(":"+port, nil)
+	server.Serve(config, port, *yttPath)
 }

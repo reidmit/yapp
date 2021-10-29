@@ -1,4 +1,4 @@
-package main
+package config
 
 import (
 	"io/ioutil"
@@ -6,23 +6,23 @@ import (
 	"gopkg.in/yaml.v2"
 )
 
-type appConfig struct {
+type AppConfig struct {
 	Path   string
-	Routes map[string]routeConfig
+	Routes map[string]RouteConfig
 }
 
-type routeConfig struct {
+type RouteConfig struct {
 	Status *int
 	Body   map[string]interface{}
 }
 
-func loadConfig(path string) (*appConfig, error) {
+func Load(path string) (*AppConfig, error) {
 	yamlConfig, err := ioutil.ReadFile(path)
 	if err != nil {
 		return nil, err
 	}
 
-	parsedConfig := appConfig{}
+	parsedConfig := AppConfig{}
 
 	err = yaml.Unmarshal(yamlConfig, &parsedConfig)
 	if err != nil {

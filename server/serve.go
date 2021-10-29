@@ -1,4 +1,4 @@
-package main
+package server
 
 import (
 	"fmt"
@@ -6,16 +6,26 @@ import (
 	"net/http"
 	"strings"
 
+	"github.com/reidmit/yapp/config"
+	"github.com/reidmit/yapp/ytt"
 	"gopkg.in/yaml.v2"
 )
 
 type handledRoute struct {
 	method string
 	path   string
-	config routeConfig
+	config config.RouteConfig
 }
 
-func setUpHandlers(config appConfig, yttPath string) {
+func Serve(appConfig *config.AppConfig, port string, yttPath string) {
+	setUpHandlers(appConfig, yttPath)
+
+	fmt.Printf("Listening on port %v...\n", port)
+
+	http.ListenAndServe(":"+port, nil)
+}
+
+func setUpHandlers(config *config.AppConfig, yttPath string) {
 	for _, route := range getHandledRoutes(config.Routes) {
 		route := route // lol
 
@@ -32,7 +42,7 @@ func setUpHandlers(config appConfig, yttPath string) {
 					reqBody := make(map[string]interface{})
 					_ = yaml.Unmarshal(reqBodyBytes, reqBody)
 
-					err := runYTT(yttPath, &config, map[string]interface{}{
+					err := ytt.Run(yttPath, config, map[string]interface{}{
 						"request": reqBody,
 					})
 					if err != nil {
@@ -68,7 +78,7 @@ func setUpHandlers(config appConfig, yttPath string) {
 	}
 }
 
-func getHandledRoutes(routes map[string]routeConfig) []handledRoute {
+func getHandledRoutes(routes map[string]config.RouteConfig) []handledRoute {
 	var handledRoutes []handledRoute
 
 	for routeWithMethod, routeConfig := range routes {

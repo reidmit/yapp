@@ -1,6 +1,5 @@
 build:
-	mkdir -p out
-	go build -o out/yapp ./cmd/yapp
+	go build ./cmd/yapp
 
 example-hello-world:
-	go run ./cmd/yapp -f examples/hello-world/yapp.yml
+	@ go run ./cmd/yapp run examples/hello-world/yapp.yml

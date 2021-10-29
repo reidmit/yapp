@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"strconv"
 	"strings"
 
 	"github.com/reidmit/yapp/internal/config"
@@ -17,12 +18,12 @@ type handledRoute struct {
 	config config.RouteConfig
 }
 
-func Serve(appConfig *config.AppConfig, port string, yttPath string) {
+func Serve(appConfig *config.AppConfig, port int64, yttPath string) {
 	setUpHandlers(appConfig, yttPath)
 
 	fmt.Printf("Listening on port %v...\n", port)
 
-	http.ListenAndServe(":"+port, nil)
+	http.ListenAndServe(":"+strconv.FormatInt(port, 10), nil)
 }
 
 func setUpHandlers(config *config.AppConfig, yttPath string) {

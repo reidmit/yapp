@@ -5,8 +5,9 @@ A framework for apps written entirely in YAML, powered by [ytt](https://github.c
 Highly experimental! Do not use!
 
 ```sh
-# start the server...
-go run . -f examples/hello-world/yapp.yml
+# build & start the server...
+make build
+./yapp run examples/hello-world/yapp.yml
 # and then...
 curl localhost:7000/hello -d '{"name": "reid"}'
 ```
@@ -27,7 +28,7 @@ routes:
       message: "hello!"
 ```
 
-Run it with `go run . -f path/to/yapp.yml`, and then `curl localhost:7000/hello`:
+Run with `yapp run` and try `curl localhost:7000/hello`:
 
 ```sh
 $ curl localhost:7000/hello
@@ -47,7 +48,7 @@ routes:
       name: #@ data.values.request.name
 ```
 
-Run it with `go run . -f path/to/yapp.yml`, and then `curl localhost:7000/hello -d '{"name": "reid"}'`:
+Run with `yapp run` and try `curl localhost:7000/hello -d '{"name": "reid"}'`:
 
 ```sh
 $ curl localhost:7000/hello -d '{"name": "reid"}'

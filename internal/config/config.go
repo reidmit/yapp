@@ -2,6 +2,8 @@ package config
 
 import (
 	"io/ioutil"
+	"os"
+	"path/filepath"
 
 	"gopkg.in/yaml.v2"
 )
@@ -16,8 +18,17 @@ type RouteConfig struct {
 	Body   map[string]interface{}
 }
 
-func Load(path string) (*AppConfig, error) {
-	yamlConfig, err := ioutil.ReadFile(path)
+func Load(configPath string) (*AppConfig, error) {
+	stats, err := os.Stat(configPath)
+	if err != nil {
+		return nil, err
+	}
+
+	if stats.IsDir() {
+		configPath = filepath.Join(configPath, "yapp.yml")
+	}
+
+	yamlConfig, err := ioutil.ReadFile(configPath)
 	if err != nil {
 		return nil, err
 	}
@@ -29,7 +40,7 @@ func Load(path string) (*AppConfig, error) {
 		return nil, err
 	}
 
-	parsedConfig.Path = path
+	parsedConfig.Path = configPath
 
 	return &parsedConfig, nil
 }

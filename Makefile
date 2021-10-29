@@ -2,10 +2,10 @@ build:
 	go build ./cmd/yapp
 
 example-hello-world:
-	@ go run ./cmd/yapp run examples/hello-world/yapp.yml
+	@ go run ./cmd/yapp run examples/hello-world
 
 example-broken:
-	@ go run ./cmd/yapp run examples/broken/yapp.yml
+	@ go run ./cmd/yapp run examples/broken
 
 example-static:
-	@ go run ./cmd/yapp run examples/static/yapp.yml
+	@ go run ./cmd/yapp run examples/static

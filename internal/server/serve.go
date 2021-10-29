@@ -44,7 +44,9 @@ func setUpHandlers(appConfig *config.AppConfig, yttPath string) {
 					_ = yaml.Unmarshal(reqBodyBytes, reqBody)
 
 					err := ytt.Run(appConfig, map[string]interface{}{
-						"request": reqBody,
+						"request": map[string]interface{}{
+							"body": reqBody,
+						},
 					})
 					if err != nil {
 						fmt.Printf("error running ytt: %v", err)

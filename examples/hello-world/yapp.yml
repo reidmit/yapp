@@ -15,4 +15,4 @@ routes:
     status: 200
     body:
       message: "hello!"
-      name: #@ data.values.request.name
+      name: #@ data.values.request.body.name

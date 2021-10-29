@@ -2,7 +2,7 @@
 
 A framework for apps written entirely in YAML, powered by [ytt](https://github.com/vmware-tanzu/carvel-ytt).
 
-Highly experimental! Do not use!
+Highly experimental! This is a ridiculous idea! Do not use!
 
 ```sh
 # build & start the server...
@@ -14,7 +14,13 @@ curl localhost:7000/hello -d '{"name": "reid"}'
 
 ## how it works
 
-You configure your app's routes in a `yapp.yml` file. You can use ytt to template this file! And for POST requests, the request body will be parsed as YAML and passed to the template as [data values](https://carvel.dev/ytt/docs/latest/how-to-use-data-values/) under `data.values.request`.
+You configure your app's routes in a `yapp.yml` file. You can use ytt to template this file!
+
+Details about incoming HTTP requests will be passed to the template as [data values](https://carvel.dev/ytt/docs/latest/how-to-use-data-values/) under `data.values.request`.
+
+These are the values that are currently provided to your template:
+
+- `data.values.request.body`: request body, parsed as YAML
 
 ## examples
 
@@ -45,7 +51,7 @@ routes:
     status: 200
     body:
       message: "hello!"
-      name: #@ data.values.request.name
+      name: #@ data.values.request.body.name
 ```
 
 Run with `yapp run` and try `curl localhost:7000/hello -d '{"name": "reid"}'`:
@@ -56,4 +62,4 @@ message: hello!
 name: reid
 ```
 
-See `examples` directory for more!
+See the `examples` directory for more!

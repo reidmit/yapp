@@ -7,7 +7,7 @@ Highly experimental! This is a ridiculous idea! Do not use!
 ```sh
 # build & start the server...
 make build
-./yapp run examples/hello-world/yapp.yml
+./yapp examples/hello-world/yapp.yml
 # and then...
 curl localhost:7000/hello -d '{"name": "reid"}'
 ```
@@ -36,7 +36,7 @@ routes:
       message: "hello!"
 ```
 
-Run with `yapp run` and try `curl localhost:7000/hello`:
+Run with `yapp` and try `curl localhost:7000/hello`:
 
 ```sh
 $ curl localhost:7000/hello
@@ -56,7 +56,7 @@ routes:
       name: #@ data.values.request.body.name
 ```
 
-Run with `yapp run` and try `curl localhost:7000/hello -d '{"name": "reid"}'`:
+Run with `yapp` and try `curl localhost:7000/hello -d '{"name": "reid"}'`:
 
 ```sh
 $ curl localhost:7000/hello -d '{"name": "reid"}'
@@ -64,4 +64,4 @@ message: hello!
 name: reid
 ```
 
-See the `examples` directory for more!
+See the [`examples`](/examples) directory for more!

@@ -18,20 +18,16 @@ var appCommit string
 
 func main() {
 	rootCmd := &cobra.Command{
-		Use:     appName,
+		Use:     appName + " <path/to/yapp.yml>",
 		Version: getAppVersion(),
+		Short:   "Run your app",
+		Long:    "Run your app using the given yapp.yml file",
+		Args:    cobra.ExactArgs(1),
 		CompletionOptions: cobra.CompletionOptions{
 			DisableDefaultCmd:   true,
 			DisableDescriptions: true,
 			DisableNoDescFlag:   true,
 		},
-	}
-
-	runCmd := &cobra.Command{
-		Use:   "run <path/to/yapp.yml>",
-		Short: "Run your yapp",
-		Long:  "Run your yapp using the given yapp.yml file",
-		Args:  cobra.ExactArgs(1),
 		Run: func(cmd *cobra.Command, args []string) {
 			configPath := args[0]
 			port, _ := cmd.Flags().GetInt64("port")
@@ -46,13 +42,11 @@ func main() {
 		},
 	}
 
-	runCmd.PersistentFlags().Int64(
+	rootCmd.Flags().Int64(
 		"port",
 		getDefaultPort(),
 		"port to listen on (can also set $PORT env var)",
 	)
-
-	rootCmd.AddCommand(runCmd)
 
 	rootCmd.Execute()
 }

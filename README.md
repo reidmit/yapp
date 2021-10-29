@@ -1,4 +1,4 @@
-# yapp
+# yapp (pronounced [/ʒæp/](http://ipa-reader.xyz/?text=%CA%92%C3%A6p&voice=Brian))
 
 A framework for apps written entirely in YAML, powered by [ytt](https://github.com/vmware-tanzu/carvel-ytt).
 

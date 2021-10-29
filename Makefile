@@ -9,3 +9,6 @@ example-broken:
 
 example-static:
 	@ go run ./cmd/yapp run examples/static
+
+example-echo:
+	@ go run ./cmd/yapp run examples/echo

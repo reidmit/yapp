@@ -1,0 +1,9 @@
+#@ load("@ytt:data", "data")
+---
+routes:
+  GET /echo:
+    status: 200
+    body:
+      body: #@ data.values.request.body
+      headers: #@ data.values.request.headers
+      query: #@ data.values.request.query

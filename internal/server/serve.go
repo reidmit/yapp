@@ -90,6 +90,7 @@ func generateDataValuesFromRequest(req *http.Request) (map[string]interface{}, e
 		"request": map[string]interface{}{
 			"body":    reqBody,
 			"headers": req.Header,
+			"query":   req.URL.Query(),
 		},
 	}, nil
 }

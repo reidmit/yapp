@@ -1,7 +1,6 @@
 package server
 
 import (
-	"fmt"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -47,8 +46,6 @@ func setUpHandlers(appConfig *config.AppConfig) {
 				if newRouteConfig.Status != nil {
 					res.WriteHeader(*newRouteConfig.Status)
 				}
-
-				fmt.Printf("rendered: %+v\n", newRouteConfig)
 
 				if newRouteConfig.Body != nil {
 					responseBody, err := yaml.Marshal(newRouteConfig.Body)

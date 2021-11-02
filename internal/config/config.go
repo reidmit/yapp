@@ -18,8 +18,9 @@ type AppConfig struct {
 }
 
 type RouteConfig struct {
-	Status *int
-	Body   interface{}
+	Status  *int
+	Headers map[string][]string
+	Body    interface{}
 }
 
 type HandledRoute struct {

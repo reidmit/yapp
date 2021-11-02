@@ -17,3 +17,6 @@ example-echo:
 
 example-fancy:
 	go run ./cmd/yapp examples/fancy --debug
+
+example-response-headers:
+	go run ./cmd/yapp examples/response-headers --debug

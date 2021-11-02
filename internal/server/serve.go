@@ -43,6 +43,14 @@ func setUpHandlers(appConfig *config.AppConfig) {
 					return
 				}
 
+				if newRouteConfig.Headers != nil {
+					for name, values := range newRouteConfig.Headers {
+						for _, value := range values {
+							res.Header().Add(name, value)
+						}
+					}
+				}
+
 				if newRouteConfig.Status != nil {
 					res.WriteHeader(*newRouteConfig.Status)
 				}

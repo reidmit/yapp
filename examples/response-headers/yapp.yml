@@ -1,0 +1,9 @@
+---
+routes:
+  GET /hi:
+    status: 200
+    headers:
+      content-type: ["text/yaml"]
+      x-yapp-header: ["yapp"]
+    body:
+      message: "nice"

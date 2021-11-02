@@ -24,6 +24,12 @@ These are the values that are currently provided to your template:
 - `data.values.request.headers`: request headers (`map[string]string[]`)
 - `data.values.request.query`: request query parameters (`map[string]string[]`)
 
+And these are the fields that you can set on your routes to control the HTTP responses:
+
+- `status`: HTTP status code for the response (`int`, defaults to `200` if not set)
+- `headers`: custom response headers to set (`map[string]string[]`)
+- `body`: response body (can be anything YAML-marshallable)
+
 ## examples
 
 A simple yapp is just a YAML file like this:

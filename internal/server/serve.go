@@ -1,13 +1,18 @@
 package server
 
 import (
+	"fmt"
 	"io/ioutil"
 	"log"
 	"net/http"
 	"strconv"
 
+	"github.com/traefik/yaegi/interp"
+	"github.com/traefik/yaegi/stdlib"
+
 	"github.com/reidmit/yapp/internal/config"
 	"github.com/reidmit/yapp/internal/ytt"
+
 	"gopkg.in/yaml.v2"
 )
 
@@ -43,27 +48,47 @@ func setUpHandlers(appConfig *config.AppConfig) {
 					return
 				}
 
-				if newRouteConfig.Headers != nil {
-					for name, values := range newRouteConfig.Headers {
-						for _, value := range values {
-							res.Header().Add(name, value)
+				if route.Config.Handler != "" {
+					i := interp.New(interp.Options{})
+					i.Use(stdlib.Symbols)
+
+					_, err := i.Eval(route.Config.Handler)
+					if err != nil {
+						fmt.Printf("error interpreting handler src: %v", err)
+						http.Error(res, "handler src not gud", 500)
+					}
+
+					handlerSymbol, err := i.Eval("serveHTTP")
+					if err != nil {
+						fmt.Printf("error getting handler symbol: %v", err)
+						http.Error(res, "handler not gud", 500)
+					}
+
+					handlerSymbol.Interface().(func(http.ResponseWriter, *http.Request))(res, req)
+					return
+				} else {
+					if newRouteConfig.Headers != nil {
+						for name, values := range newRouteConfig.Headers {
+							for _, value := range values {
+								res.Header().Add(name, value)
+							}
 						}
 					}
-				}
 
-				if newRouteConfig.Status != nil {
-					res.WriteHeader(*newRouteConfig.Status)
-				}
-
-				if newRouteConfig.Body != nil {
-					responseBody, err := yaml.Marshal(newRouteConfig.Body)
-					if err != nil {
-						log.Printf("Error marshalling response body: %v", err)
-						http.Error(res, "uh oh", 500)
-						return
+					if newRouteConfig.Status != nil {
+						res.WriteHeader(*newRouteConfig.Status)
 					}
 
-					res.Write(responseBody)
+					if newRouteConfig.Body != nil {
+						responseBody, err := yaml.Marshal(newRouteConfig.Body)
+						if err != nil {
+							log.Printf("Error marshalling response body: %v", err)
+							http.Error(res, "uh oh", 500)
+							return
+						}
+
+						res.Write(responseBody)
+					}
 				}
 
 				return

@@ -21,6 +21,7 @@ type RouteConfig struct {
 	Status  *int
 	Headers map[string][]string
 	Body    interface{}
+	Handler string
 }
 
 type HandledRoute struct {

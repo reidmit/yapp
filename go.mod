@@ -5,6 +5,7 @@ go 1.17
 require (
 	github.com/k14s/ytt v0.37.0
 	github.com/spf13/cobra v1.2.1
+	github.com/traefik/yaegi v0.10.0
 	gopkg.in/yaml.v2 v2.4.0
 )
 

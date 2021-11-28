@@ -1,0 +1,11 @@
+---
+routes:
+  GET /handlethis:
+    handler: | # Note that every custom handler must match this signature EXACTLY
+      import "net/http"
+
+      func serveHTTP(res http.ResponseWriter, req *http.Request) {
+        res.WriteHeader(http.StatusOK)
+
+        res.Write([]byte("this is a bad idea, ok!"))
+      }
